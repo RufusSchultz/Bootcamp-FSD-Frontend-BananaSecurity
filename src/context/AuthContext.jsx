@@ -1,12 +1,11 @@
-
-const AuthContext = React.createContext({});
+import React, {useState} from "react";
+export const AuthContext = React.createContext({});
 
 function AuthContextProvider({children}) {
+    const [isAuth, toggleIsAuth] = useState(false);
 
     const data = {
-        soort: "VR",
-        spel: "Golf",
-        leuk: true,
+        isAuth,
     }
 
     return(
