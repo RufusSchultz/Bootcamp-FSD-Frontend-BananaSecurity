@@ -4,10 +4,6 @@ import {AuthContext} from "../context/AuthContext";
 
 function Home() {
 
-  // const test = useContext(AuthContext);
-  // console.log(test);
-
-
   return (
     <>
       <h1>Homepagina</h1>

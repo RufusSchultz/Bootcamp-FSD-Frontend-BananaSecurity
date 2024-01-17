@@ -6,7 +6,6 @@ import {AuthContext} from "../context/AuthContext";
 function NavBar() {
     const navigate = useNavigate();
     const contextContent = useContext(AuthContext);
-    console.log(contextContent);
 
     return (
         <nav>
@@ -38,7 +37,7 @@ function NavBar() {
             <div>
                 <button
                     type="button"
-                    onClick={() => navigate('/')}
+                    onClick={contextContent.logOutHandler}
                 >
                     Log out
                 </button>
