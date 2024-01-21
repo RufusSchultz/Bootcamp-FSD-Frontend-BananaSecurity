@@ -5,24 +5,24 @@ export const AuthContext = React.createContext({});
 function AuthContextProvider({children}) {
 
     const navigate = useNavigate();
-    const [isAuth, toggleIsAuth] = useState(false);
+    const [isAuth, setIsAuth] = useState({isAuth: false, user: ""});
 
-    function logIn(e) {
-        e.preventDefault();
-        toggleIsAuth(true);
+    function logIn(userEmail) {
+        setIsAuth({isAuth:true, user: userEmail});
         console.log("Gebruiker is ingelogd!");
         navigate("/profile");
     }
 
     function logOut(e) {
         e.preventDefault();
-        toggleIsAuth(false);
+        setIsAuth({isAuth: false, user: ""});
         console.log("Gebruiker is uitgelogd!");
         navigate("/")
     }
 
     const data = {
-        isAuth,
+        isAuth: isAuth.isAuth,
+        user: isAuth.user,
         logInHandler: logIn,
         logOutHandler: logOut,
     }

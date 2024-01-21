@@ -9,11 +9,18 @@ function SignUp() {
         harum, numquam, placeat quisquam repellat rerum suscipit ullam vitae. A ab ad assumenda, consequuntur deserunt
         doloremque ea eveniet facere fuga illum in numquam quia reiciendis rem sequi tenetur veniam?</p>
       <form>
-        <p>*Invoervelden*</p>
+          <label htmlFor={"username"}>Gebruikersnaam:</label>
+          <input type="text" id={"username"}/>
+          <label htmlFor={"email"}>E-mail:</label>
+          <input type="email" id={"email"} />
+          <label htmlFor={"password"}>Wachtwoord:</label>
+          <input type="password" id={"password"} />
+          <button type={"submit"}>Maak account</button>
       </form>
       <p>Heb je al een account? Je kunt je <Link to="/signin">hier</Link> inloggen.</p>
     </>
   );
 }
+
 
 export default SignUp;
