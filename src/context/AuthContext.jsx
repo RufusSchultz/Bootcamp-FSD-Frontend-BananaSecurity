@@ -5,7 +5,7 @@ export const AuthContext = React.createContext({});
 function AuthContextProvider({children}) {
 
     const navigate = useNavigate();
-    const [isAuth, setIsAuth] = useState({isAuth: false, user: ""});
+    const [isAuth, setIsAuth] = useState({isAuth: false, user: null});
 
     function logIn(userEmail) {
         setIsAuth({isAuth:true, user: userEmail});
