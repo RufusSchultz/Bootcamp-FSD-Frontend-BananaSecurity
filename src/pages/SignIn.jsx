@@ -25,7 +25,6 @@ function SignIn() {
         e.preventDefault();
         try {
             const response = await axios.post(endpoint, formState);
-            console.log(response);
             contextContent.logInHandler(response.data.accessToken);
         } catch(e) {
             console.error(e);

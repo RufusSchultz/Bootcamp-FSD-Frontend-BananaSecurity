@@ -23,7 +23,6 @@ function SignUp() {
         e.preventDefault();
         try {
             const response = await axios.post(endpoint, formState);
-            console.log(response);
             navigate("/signin");
         } catch(e) {
             console.error(e);

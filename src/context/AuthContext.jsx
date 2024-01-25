@@ -1,7 +1,9 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 import axios from "axios";
+import validTokenChecker from "../helpers/validTokenChecker";
+
 
 export const AuthContext = React.createContext({});
 
@@ -11,13 +13,27 @@ function AuthContextProvider({children}) {
     const [auth, setAuth] = useState({
         isAuth: false,
         user: null,
+        status: "pending",
     });
+
+    useEffect(() => {
+        console.log("It's refreshed, exciting!");
+        const token = localStorage.getItem('token');
+        if (token && validTokenChecker(token)) {
+            void logIn(token);
+        } else {
+            setAuth({
+                isAuth: false,
+                user: null,
+                status: "done",
+            })
+        }
+    }, []);
 
     async function logIn(token) {
 
         localStorage.setItem("token", token);
         const decoded = jwtDecode(token);
-        console.log(decoded);
         const endpoint = `http://localhost:3000/600/users/${decoded.sub}`
 
         try {
@@ -35,20 +51,25 @@ function AuthContextProvider({children}) {
                     email: response.data.email,
                     id: response.data.id,
                 },
+                status: "done",
             });
             console.log("Gebruiker is ingelogd!");
             navigate("/profile");
-            console.log(response);
         } catch (e) {
             console.error(e);
-            // logOut();
+            logOut();
         }
 
     }
 
     function logOut(e) {
         e.preventDefault();
-        setAuth({isAuth: false, user: ""});
+        localStorage.removeItem("token");
+        setAuth({
+            isAuth: false,
+            user: null,
+            status: "done",
+        });
         console.log("Gebruiker is uitgelogd!");
         navigate("/")
     }
@@ -62,7 +83,7 @@ function AuthContextProvider({children}) {
 
     return (
         <AuthContext.Provider value={data}>
-            {children}
+            {auth.status === 'done' ? children : <p>Loading...</p>}
         </AuthContext.Provider>
     )
 }
