@@ -35,7 +35,7 @@ function NavBar() {
 
             {contextContent.isAuth &&
             <div>
-                <span>{contextContent.user}</span>
+                <span>{contextContent.user.username}</span>
                 <button
                     type="button"
                     onClick={contextContent.logOutHandler}

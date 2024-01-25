@@ -1,15 +1,36 @@
 import React, {useContext, useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import {AuthContext} from "../context/AuthContext";
+import axios from "axios";
 
 function SignIn() {
     const contextContent = useContext(AuthContext);
+    const endpoint = "http://localhost:3000/login"
+
+    const [formState, setFormState] = useState({
+        email: "",
+        password: "",
+    })
 
     const [emailValue, setEmailValue] = useState("")
 
-    function handleSubmit(e) {
+    function handleFormChange(e) {
+        setFormState({
+            ...formState,
+            [e.target.name]: e.target.value,
+        })
+    }
+
+    async function handleSubmit(e) {
         e.preventDefault();
-        contextContent.logInHandler(emailValue);
+        try {
+            const response = await axios.post(endpoint, formState);
+            console.log(response);
+            contextContent.logInHandler(response.data.accessToken);
+        } catch(e) {
+            console.error(e);
+        }
+        // contextContent.logInHandler(formState);
     }
 
   return (
@@ -21,11 +42,17 @@ function SignIn() {
           <label htmlFor={"email"}>Email:</label>
           <input id={"email"}
                  type="email"
-                 value={emailValue}
-                 onChange={(e)=> setEmailValue(e.target.value)}
+                 name={"email"}
+                 value={formState.email}
+                 onChange={handleFormChange}
           />
           <label htmlFor={"password"}>Wachtwoord:</label>
-          <input id={"password"} type="password"/>
+          <input id={"password"}
+                 type="password"
+                 name={"password"}
+                 value={formState.password}
+                 onChange={handleFormChange}
+          />
         <button type={"submit"}>Inloggen</button>
       </form>
 
