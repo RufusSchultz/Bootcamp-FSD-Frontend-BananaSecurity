@@ -1,13 +1,17 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import axios from "axios";
 
 function SignUp() {
     const navigate = useNavigate();
+    const abortController = new AbortController();
+    const isMounted = useRef(false);
+    const [isSubmitted, toggleIsSubmitted] = useState(false);
     const [formState, setFormState] = useState({
         username: "",
         email: "",
         password: "",
+        signal: abortController.signal
     });
 
     const endpoint = "http://localhost:3000/register"
@@ -19,14 +23,33 @@ function SignUp() {
         })
     }
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-        try {
-            const response = await axios.post(endpoint, formState);
-            navigate("/signin");
-        } catch(e) {
-            console.error(e);
+    useEffect(() => {
+
+        if (isMounted.current) {
+            async function submit() {
+
+                try {
+                    const response = await axios.post(endpoint, formState);
+                    navigate("/signin");
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+
+            void submit();
+
+            return function cleanup() {
+                abortController.abort();
+            }
         }
+
+        isMounted.current = true;
+
+    }, [isSubmitted]);
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        toggleIsSubmitted(true);
     }
 
 

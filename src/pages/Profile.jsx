@@ -6,6 +6,7 @@ import axios from "axios";
 
 function Profile() {
     const contextContent = useContext(AuthContext);
+    const abortController = new AbortController();
     const [privateContent, setPrivateContent] = useState(null);
 
     useEffect(() => {
@@ -18,16 +19,20 @@ function Profile() {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
-                    }
+                    },
+                    signal: abortController.signal,
                 })
                 setPrivateContent(response);
-                console.log(response);
             } catch (e) {
                 console.error(e);
             }
         }
 
         void fetchPrivateContent();
+
+        return function cleanup() {
+            abortController.abort();
+        }
 
     }, []);
 
